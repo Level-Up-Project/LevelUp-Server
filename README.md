@@ -2,6 +2,46 @@
 
 ## File Structure And Info
 
+```
+LevelUp-Server
+├── .husky/
+│   └── _/
+│       ├── .gitignore
+│       ├── commt-msg
+│       ├── h
+│       ├── post-checkout
+│       ├── post-commit
+│       └── pre-commit
+├── src
+│   ├── config/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   ├── validators/
+│   └── app.ts
+│   └── index.ts
+├── .env
+├── .eslintignore
+├── .eslintrc.json
+├── .gitattributes
+├── .gitignore
+├── .lintstagedrc.json
+├── .nvmrc
+├── .prettierignore
+├── .prettierrc.json
+├── ecosystem.config.json
+├── eslint.config.js
+├── LICENSE
+├── nodemon.json
+├── package-lock.json
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
 `.tsconfig.json` - TypeScript configuration file
 
 `package.json` - Node.js package configuration file 💖
