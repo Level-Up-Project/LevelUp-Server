@@ -4,8 +4,9 @@ import compression from 'compression';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import errorHandler from './middlewares/error';
 import config from './config/config';
+import errorHandler from './utils/error';
+import v1Router from './controllers/v1';
 
 const app = express();
 
@@ -31,12 +32,13 @@ app.use(cors());
 app.options('*', cors());
 
 // ==================== Routes ====================
+app.use('/api/v1', v1Router);
 
-app.use(errorHandler);
+app.use(errorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void);
 
 // send back a 404 error for any unknown api request
 app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  res.status(404).json({ error: 'Not Found' });
+  res.status(404).json({ error: 'Route Not Found' });
 });
 
 export default app;
