@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 interface locationSchema {
   city: string;
@@ -86,6 +87,21 @@ const UserSchema: Schema = new Schema(
   { timestamps: true },
 );
 
+UserSchema.pre<UserInterface>('save', async function (next) {
+  const user = this;
+  if (!user.isModified('password')) {
+    return next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(user.password, salt);
+  next();
+});
+
+UserSchema.methods.isPasswordCorrect = async function (password: string) {
+  return bcrypt.compare(password, this.password);
+};
+
 interface UserInterface {
   name: string;
   email: string;
@@ -98,6 +114,7 @@ interface UserInterface {
   location: locationSchema;
   preference: preferenceSchema;
   refreshToken: string;
+  isModified: (field: string) => boolean;
 }
 
 const User = mongoose.model<UserInterface>('User', UserSchema);
