@@ -1,4 +1,3 @@
-import { required } from 'joi';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export enum sessionType {
@@ -29,7 +28,7 @@ export interface ISession extends Document {
   joinee: IJoinee[];
   feedbacks: mongoose.Types.ObjectId[];
   sessionJoinLink: string;
-  recordingSrc: string;
+  recordingSrc?: string;
   startTime: Date;
   endTime: Date;
   status: 'pending' | 'approve' | 'cancel';
@@ -40,7 +39,7 @@ const hostSchema: Schema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Host user id is required'],
+    required: [true, 'Host user ID is required'],
   },
   role: {
     type: String,
@@ -48,7 +47,7 @@ const hostSchema: Schema = new Schema({
     required: [true, 'Role is required'],
   },
   joinTime: {
-    type: String,
+    type: Date,
     required: [true, 'Host join time is required'],
   },
   leaveTime: Date,
@@ -58,11 +57,11 @@ const joineeSchema: Schema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'userId is required'],
+    required: [true, 'User ID is required'],
   },
   joinTime: {
     type: Date,
-    required: [true, 'joinTime is required'],
+    required: [true, 'Join time is required'],
   },
   leaveTime: Date,
 });
@@ -89,10 +88,11 @@ const SessionSchema: Schema = new Schema(
 
     joinee: [joineeSchema],
 
-    feedback: [
+    feedbacks: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'feedback',
+        ref: 'Feedback',
+        default: [],
       },
     ],
 
@@ -103,6 +103,7 @@ const SessionSchema: Schema = new Schema(
 
     recordingSrc: {
       type: String,
+      default: '',
     },
 
     startTime: {
