@@ -1,12 +1,14 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+// Interface for feedback
 export interface IFeedback extends Document {
-  title: String;
-  description: String;
+  title: string;
+  description: string;
   rating: number;
   givenBy: mongoose.Types.ObjectId;
 }
 
+// Schema for Feedback
 const FeedbackSchema: Schema = new Schema(
   {
     title: {

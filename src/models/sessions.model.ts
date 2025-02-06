@@ -1,109 +1,95 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export enum sessionType {
-  EC_CONNECT = 'Ec Connect',
-  IA_CONNECT = 'IA Connect',
-  LEADERSHIP_CONNECT = 'Leadership Connect',
-  MENTOR_CONNECT = 'Mentor Connect',
-}
-
-interface IJoinee {
+// Interface for session member timing
+interface ISessionMemberTiming {
   userId: mongoose.Types.ObjectId;
   joinTime: Date;
   leaveTime?: Date;
 }
 
-interface IHost {
-  userId: mongoose.Types.ObjectId;
-  role: 'host' | 'co-host';
-  joinTime: Date;
-  leaveTime?: Date;
-}
-
+// Interface for Session
 export interface ISession extends Document {
   title: string;
   description: string;
-  type: sessionType;
-  host: IHost[];
-  joinee: IJoinee[];
+  type: 'ec-connect' | 'ia-connect' | 'leadership-connect' | 'mentor-connect';
   feedbacks: mongoose.Types.ObjectId[];
   sessionJoinLink: string;
-  recordingSrc?: string;
+  recordingSrc?: string | null;
   startTime: Date;
   endTime: Date;
   status: 'pending' | 'approve' | 'cancel';
   isSolo: boolean;
 }
 
-const hostSchema: Schema = new Schema({
+// Schema for session member timing
+const sessionMemberTimingSchema: Schema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Host user ID is required'],
-  },
-  role: {
-    type: String,
-    enum: ['host', 'co-host'],
-    required: [true, 'Role is required'],
   },
   joinTime: {
     type: Date,
-    required: [true, 'Host join time is required'],
   },
-  leaveTime: Date,
-});
-
-const joineeSchema: Schema = new Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'User ID is required'],
-  },
-  joinTime: {
+  leaveTime: {
     type: Date,
-    required: [true, 'Join time is required'],
   },
-  leaveTime: Date,
 });
 
+// Schema for session members (host, co-hosts, joinee)
+const sessionMemberSchema = new Schema({
+  host: {
+    type: sessionMemberTimingSchema,
+  },
+  coHosts: {
+    type: [sessionMemberTimingSchema],
+    default: [],
+  },
+  joinee: {
+    type: [sessionMemberTimingSchema],
+    default: [],
+  },
+});
+
+// Schema for Session
 const SessionSchema: Schema = new Schema(
   {
     title: {
       type: String,
       required: [true, 'Title is required'],
+      trim: true,
     },
 
     description: {
       type: String,
-      required: [true, 'Description is required'],
+      trim: true,
     },
 
     type: {
       type: String,
-      enum: Object.values(sessionType),
+      enum: ['ec-connect', 'ia-connect', 'leadership-connect', 'mentor-connect'],
       required: [true, 'Type is required'],
     },
 
-    host: [hostSchema],
-
-    joinee: [joineeSchema],
+    sessionMembers: {
+      type: sessionMemberSchema,
+    },
 
     feedbacks: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Feedback',
-        default: [],
       },
     ],
 
     sessionJoinLink: {
       type: String,
       required: [true, 'Session join link is required'],
+      trim: true,
     },
 
     recordingSrc: {
       type: String,
-      default: '',
+      default: null,
     },
 
     startTime: {
@@ -126,6 +112,7 @@ const SessionSchema: Schema = new Schema(
     isSolo: {
       type: Boolean,
       required: [true, 'isSolo field is required'],
+      default: true,
     },
   },
   { timestamps: true },
