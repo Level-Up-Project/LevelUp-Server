@@ -26,11 +26,9 @@ const sessionMemberTimingSchema: Schema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
   },
   joinTime: {
     type: Date,
-    required: true,
   },
   leaveTime: {
     type: Date,
