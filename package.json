@@ -4,7 +4,10 @@
   "type": "module",
   "description": "Level Up Server",
   "main": "dist/index.js",
-  "repository": "https://github.com/Level-Up-Project/LevelUp-Server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Level-Up-Project/LevelUp-Server.git"
+  },
   "bugs": {
     "url": "https://github.com/Level-Up-Project/LevelUp-Server/issues"
   },
@@ -65,5 +68,7 @@
     "prettier": "^3.4.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
-  }
+  },
+  "keywords": [],
+  "homepage": "https://github.com/Level-Up-Project/LevelUp-Server#readme"
 }
