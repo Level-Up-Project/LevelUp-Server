@@ -1,11 +1,11 @@
 import express from 'express';
 import { profileSetup, getStudentProfile } from '../controllers/v1/student/profileSetup';
 import { studentValidator } from '../validators/studentValidator';
-import { validateRequest } from '../middlewares/validateRequest';
+import handleValidationErrors from '../validators/validationErrorHandlert';
 
 const studentRoute = express.Router();
 
-studentRoute.post('/setup', studentValidator, validateRequest, profileSetup);
+studentRoute.post('/setup', studentValidator, handleValidationErrors, profileSetup);
 
 studentRoute.get('/:studentCode', getStudentProfile);
 
