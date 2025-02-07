@@ -1,0 +1,47 @@
+import { Request, Response, NextFunction } from 'express';
+import asyncHandler from '../../../utils/AsyncHandler';
+import User from '../../../models/user.model';
+import ApiError from '../../../utils/ApiError';
+import ApiResponse from '../../../utils/ApiResponse';
+
+interface IGenerateTokens {
+    accessToken: string;
+    refreshToken: string;
+}
+
+async function generateAccessTokenAndRefreshToken(user: any): Promise<IGenerateTokens> {
+    try {
+        const accessToken = await user.generateAccessToken();
+        const refreshToken = await user.generateRefreshToken();
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
+        return { accessToken, refreshToken };
+    } catch (error) {
+        throw new ApiError(500, 'Error generating access token and refresh token');
+    }
+}
+
+const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        return next(new ApiError(400, 'Please Signup first'));
+    }
+    const isPasswordCorrect= await user.isPasswordCorrect(password);
+    if (!isPasswordCorrect) {
+        return next(new ApiError(400, 'Invalid password'));
+    }
+    const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user);
+    const options = {
+        httpOnly: true,
+        secure: true,
+    };
+    return res
+        .status(200)
+        .cookie('refreshToken', refreshToken, options)
+        .cookie('accessToken', accessToken, options)
+        .json(new ApiResponse(200, user, 'Login successful'));
+});
+
+export default login;
+

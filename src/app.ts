@@ -4,9 +4,11 @@ import compression from 'compression';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import cookieparser from 'cookie-parser';
 import config from './config/config';
 import errorHandler from './utils/error';
-import v1Router from './controllers/v1';
+import router from './routes/index';
+
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(morgan(config.NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 // set security HTTP headers
 app.use(helmet());
+app.use(cookieparser());
 
 // parse json request body
 app.use(express.json());
@@ -32,7 +35,7 @@ app.use(cors());
 app.options('*', cors());
 
 // ==================== Routes ====================
-app.use('/api/v1', v1Router);
+app.use('/api/v1',router);
 
 app.use(errorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void);
 

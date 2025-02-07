@@ -13,12 +13,19 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     enumerateErrorFormat(),
     config.NODE_ENV === 'development' ? winston.format.colorize() : winston.format.uncolorize(),
+    winston.format.timestamp(),
     winston.format.splat(),
-    winston.format.printf(({ level, message }) => {
-      return `${level}: ${message}`;
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} ${level}: ${message}`;
     }),
   ),
-  transports: [new winston.transports.Console({ stderrLevels: ['error'] })],
+  transports: [
+    new winston.transports.Console({ stderrLevels: ['error'] }),
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+  ],
 });
 
 export default logger;
+
+
+// admin, 
