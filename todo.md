@@ -36,15 +36,6 @@ post> /mentor/get-requested-sessions
 Request: mentorId
 Response: requested sessions details
 
-post> /mentor/session-create
-Request: mentorId, slot, joineeId
-Response: true false
-
-???? is approval required
-
-post> /mentor/join-session
-Request: mentorId, sessionId
-
 get> /mentor/get-past-session
 get> /mentor/get-present-session  
 get> /mentor/get-future-session

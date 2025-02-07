@@ -17,7 +17,7 @@ export interface ISession extends Document {
   recordingSrc?: string | null;
   startTime: Date;
   endTime: Date;
-  status: 'pending' | 'approve' | 'cancel';
+  status: 'pending' | 'approve' | 'cancel' | 'completed';
   isSolo: boolean;
 }
 
@@ -104,9 +104,15 @@ const SessionSchema: Schema = new Schema(
 
     status: {
       type: String,
-      enum: ['pending', 'approve', 'cancel'],
+      enum: ['pending', 'approve', 'cancel', 'completed'],
       required: [true, 'Session status is required'],
       default: 'pending',
+    },
+
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+      required: [true, 'Course ID is required'],
     },
 
     isSolo: {
