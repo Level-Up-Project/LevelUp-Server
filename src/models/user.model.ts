@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 interface locationSchema {
   city: string;
@@ -98,10 +99,31 @@ UserSchema.pre<UserInterface>('save', async function (next) {
   next();
 });
 
-UserSchema.methods.isPasswordCorrect = async function (password: string) {
-  return bcrypt.compare(password, this.password);
+UserSchema.methods.isPasswordCorrect = async function (password: string): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
 };
-
+UserSchema.methods.generateRefreshToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: this.role,
+      status: this.status,
+    },
+    process.env.JWT_REFRESH_SECRET as string,
+    { expiresIn: parseInt(process.env.JWT_REFRESH_EXPIRATION_DAYS as string) },
+  );
+};
+UserSchema.methods.generateAccessToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: this.role,
+      status: this.status,
+    },
+    process.env.JWT_ACCESS_SECRET as string,
+    { expiresIn: parseInt(process.env.JWT_ACCESS_EXPIRATION_MINUTES as string) },
+  );
+};
 interface UserInterface {
   name: string;
   email: string;
@@ -115,8 +137,12 @@ interface UserInterface {
   preference: preferenceSchema;
   refreshToken: string;
   isModified: (field: string) => boolean;
+  isPasswordCorrect: (password: string) => Promise<boolean>;
+  generateRefreshToken: () => Promise<string>;
+  generateAccessToken: () => Promise<string>;
 }
 
 const User = mongoose.model<UserInterface>('User', UserSchema);
 
 export default User;
+export { UserInterface };
