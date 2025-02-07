@@ -48,5 +48,3 @@ Request: mentorId, sessionId
 get> /mentor/get-past-session
 get> /mentor/get-present-session  
 get> /mentor/get-future-session
-
-Session
