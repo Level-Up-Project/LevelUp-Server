@@ -39,3 +39,5 @@ Response: requested sessions details
 get> /mentor/get-past-session
 get> /mentor/get-present-session  
 get> /mentor/get-future-session
+
+get mentors by course
