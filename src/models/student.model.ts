@@ -16,7 +16,7 @@ const educationDetailsSchema = new Schema({
   collegeName: {
     type: String,
     required: [true, 'Please provide the college name'],
-  },
+  },  
   degree: {
     type: String,
     required: [true, 'Please provide the degree'],
@@ -92,7 +92,7 @@ const StudentSchema: Schema = new Schema(
       ref: 'Course', // refers to Course model
     },
     skills: [String],
-    bookedSessions: {
+    bookedSessions: {   //has future,past and pre
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
       ref: 'Session', // refers to  Session model
