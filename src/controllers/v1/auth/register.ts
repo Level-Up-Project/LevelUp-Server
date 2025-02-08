@@ -17,7 +17,7 @@ function isAlreadyRegistered(email: string): Promise<boolean> {
 
 const register = asyncHandler(async (req: RegisterRequest, res: Response, next: NextFunction) => {
     if (await isAlreadyRegistered(req.body.email)) {
-        return next(new ApiError(400, "User already registered"));
+        throw new ApiError(400, "User already registered");
     }
     let user = await User.create(req.body);
     if(!user) {

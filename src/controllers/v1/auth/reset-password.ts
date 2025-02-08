@@ -1,9 +1,8 @@
-import { Document } from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../../../utils/AsyncHandler';
 import ApiError from '../../../utils/ApiError';
 import ApiResponse from '../../../utils/ApiResponse';
-import User, {UserInterface} from '../../../models/user.model';
+import User from '../../../models/user.model';
 import jwt from 'jsonwebtoken';
 
 

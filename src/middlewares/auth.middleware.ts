@@ -16,26 +16,34 @@ interface DecodedToken {
     exp: number;
 }
 
-const authMiddleware = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    let incomingToken = req.cookies.access_token || req.headers.authorization?.replace('Bearer ', '');
-    if (!incomingToken) {
-        throw new ApiError(401, 'Unauthorized Request');
-    }
+const authMiddleware = (roles: any)=>{
 
-    let decoded: DecodedToken;
-    try {
-        decoded = jwt.verify(incomingToken, process.env.JWT_ACCESS_SECRET as string) as DecodedToken;
-    } catch (error) {
-        throw new ApiError(401, 'Invalid or Expired Token');
-    }
+    return asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+        let incomingToken = req.cookies.access_token || req.headers.authorization?.replace('Bearer ', '');
+        if (!incomingToken) {
+            throw new ApiError(401, 'Unauthorized Request');
+        }
+    
+        let decoded: DecodedToken;
+        try {
+            decoded = jwt.verify(incomingToken, process.env.JWT_ACCESS_SECRET as string) as DecodedToken;
+        } catch (error) {
+            throw new ApiError(401, 'Invalid or Expired Token');
+        }
+    
+        let user = await User.findById(decoded._id) as Document<unknown, {}, UserInterface> & UserInterface & { _id: string };
+        if (!user) {
+            throw new ApiError(401, 'Invalid Token');
+        }
+        let incomingRole=req.cookies.role || req.headers.role;
+        if(!roles.includes(incomingRole)){
+            throw new ApiError(401, 'Unauthorized Request');
+        }
+        req.user = user; // ✅ Now TypeScript recognizes `user` correctly
+        next();
+    });
+}
 
-    let user = await User.findById(decoded._id) as Document<unknown, {}, UserInterface> & UserInterface & { _id: string };
-    if (!user) {
-        throw new ApiError(401, 'Invalid Token');
-    }
 
-    req.user = user; // ✅ Now TypeScript recognizes `user` correctly
-    next();
-});
 
 export default authMiddleware;

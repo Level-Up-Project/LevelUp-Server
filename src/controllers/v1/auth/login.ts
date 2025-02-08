@@ -3,6 +3,7 @@ import asyncHandler from '../../../utils/AsyncHandler';
 import User from '../../../models/user.model';
 import ApiError from '../../../utils/ApiError';
 import ApiResponse from '../../../utils/ApiResponse';
+import jwt from 'jsonwebtoken';
 
 interface IGenerateTokens {
     accessToken: string;
@@ -25,13 +26,14 @@ const login = asyncHandler(async (req: Request, res: Response, next: NextFunctio
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-        return next(new ApiError(400, 'Please Signup first'));
-    }
+       throw new ApiError(400, 'Please Signup first');
+       }
     const isPasswordCorrect= await user.isPasswordCorrect(password);
     if (!isPasswordCorrect) {
-        return next(new ApiError(400, 'Invalid password'));
+        throw new ApiError(400, 'Invalid password');
     }
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user);
+    const role= jwt.sign({role:user.role},process.env.ROLE_BASE_TOKEN_SECRET as string, { expiresIn: parseInt(process.env.ROLE_BASE_TOKEN_EXPIRY as string) });
     const options = {
         httpOnly: true,
         secure: true,
@@ -40,6 +42,7 @@ const login = asyncHandler(async (req: Request, res: Response, next: NextFunctio
         .status(200)
         .cookie('refreshToken', refreshToken, options)
         .cookie('accessToken', accessToken, options)
+        .cookie('role', role, options)
         .json(new ApiResponse(200, user, 'Login successful'));
 });
 

@@ -1,33 +1,33 @@
 import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
-  info: {
-    version: '', // by default: '1.0.0'
-    title: 'Masai Level Up API', // by default: 'Swagger API'
-    description:
-      'This is a working server for Masai Level Up API. It is a Node.js application that uses Express.js as the web framework. It provides a RESTful API for managing user accounts, courses, and sessions.',
-  },
-
-  host: 'localhost:3000',
-  schemes: ['http'],
-  basePath: '/api/v1',
-
-  servers: [
-    {
-      url: '', // by default: 'http://localhost:3000'
-      description: '', // by default: ''
+    info: {
+        version: '', // by default: '1.0.0'
+        title: 'Masai Level Up API', // by default: 'Swagger API'
+        description:
+            'This is a working server for Masai Level Up API. It is a Node.js application that uses Express.js as the web framework. It provides a RESTful API for managing user accounts, courses, and sessions.',
     },
-    // { ... }
-  ],
-  tags: [
-    // by default: empty Array
-    {
-      name: '', // Tag name
-      description: '', // Tag description
-    },
-    // { ... }
-  ],
-  components: {}, // by default: empty object
+
+    host: 'localhost:3000',
+    schemes: ['http'],
+    basePath: '/api/v1',
+
+    servers: [
+        {
+            url: '', // by default: 'http://localhost:3000'
+            description: '', // by default: ''
+        },
+        // { ... }
+    ],
+    tags: [
+        // by default: empty Array
+        {
+            name: '', // Tag name
+            description: '', // Tag description
+        },
+        // { ... }
+    ],
+    components: {}, // by default: empty object
 };
 
 const outputFile = 'src/api-docs.json';
