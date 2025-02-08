@@ -1,10 +1,10 @@
 import express from 'express';
-import { profileSetup } from '../controllers/v1/mentor/profile-setup';
-import profileSetupValidation from '../validators/mentor/profile-setup.validator';
-import handleValidationErrors from '../middlewares/validationErrorHandlert';
-import { sessionApprove } from '../controllers/v1/mentor/session-approve';
-import { getPastSession } from '../controllers/v1/mentor/get-past-session';
-import { getSessions } from '../controllers/v1/mentor/get-sessions';
+import { profileSetup } from '../controllers/v1/mentor/profile-setup.js';
+import profileSetupValidation from '../validators/mentor/profile-setup.validator.js';
+import handleValidationErrors from '../middlewares/validationErrorHandlert.js';
+import { sessionApprove } from '../controllers/v1/mentor/session-approve.js';
+import { getPastSession } from '../controllers/v1/mentor/get-past-session.js';
+import { getSessions } from '../controllers/v1/mentor/get-sessions.js';
 
 const mentorRoute = express.Router();
 

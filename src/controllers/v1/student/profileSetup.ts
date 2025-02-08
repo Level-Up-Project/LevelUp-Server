@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import Student from '../../../models/student.model';
-import ApiError from '../../../utils/ApiError';
-import asyncHandler from '../../../utils/AsyncHandler';
-import ApiResponse from '../../../utils/ApiResponse';
+import Student from '../../../models/student.model.js';
+import ApiError from '../../../utils/ApiError.js';
+import asyncHandler from '../../../utils/AsyncHandler.js';
+import ApiResponse from '../../../utils/ApiResponse.js';
 
 // Create or Update Student Profile
 export const profileSetup = asyncHandler(async (req: Request, res: Response) => {

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import Student from '../../../models/student.model';
-import asyncHandler from '../../../utils/AsyncHandler';
-import ApiError from '../../../utils/ApiError';
-import ApiResponse from '../../../utils/ApiResponse';
-import Session from '../../../models/sessions.model';
+import Student from '../../../models/student.model.js';
+import asyncHandler from '../../../utils/AsyncHandler.js';
+import ApiError from '../../../utils/ApiError.js';
+import ApiResponse from '../../../utils/ApiResponse.js';
+import Session from '../../../models/sessions.model.js';
 
 interface AuthenticatedRequest extends Request {
     user?: {
