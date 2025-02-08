@@ -5,10 +5,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cookieparser from 'cookie-parser';
-import config from './config/config';
-import errorHandler from './utils/error';
-import router from './routes/index';
-
+import config from './config/config.js';
+import errorHandler from './utils/error.js';
+import router from './routes/index.js';
 
 const app = express();
 
@@ -35,13 +34,13 @@ app.use(cors());
 app.options('*', cors());
 
 // ==================== Routes ====================
-app.use('/api/v1',router);
+app.use('/api/v1', router);
 
 app.use(errorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void);
 
 // send back a 404 error for any unknown api request
 app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  res.status(404).json({ error: 'Route Not Found' });
+    res.status(404).json({ error: 'Route Not Found' });
 });
 
 export default app;

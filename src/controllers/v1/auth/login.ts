@@ -1,9 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
-import asyncHandler from '../../../utils/AsyncHandler';
-import User from '../../../models/user.model';
-import ApiError from '../../../utils/ApiError';
-import ApiResponse from '../../../utils/ApiResponse';
+import { Request, Response } from 'express';
+import asyncHandler from '../../../utils/AsyncHandler.js';
+import User from '../../../models/user.model.js';
+import ApiError from '../../../utils/ApiError.js';
+import ApiResponse from '../../../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
+import logger from '../../../config/logger.js';
 
 interface IGenerateTokens {
     accessToken: string;
@@ -18,22 +19,25 @@ async function generateAccessTokenAndRefreshToken(user: any): Promise<IGenerateT
         await user.save({ validateBeforeSave: false });
         return { accessToken, refreshToken };
     } catch (error) {
+        logger.error(error);
         throw new ApiError(500, 'Error generating access token and refresh token');
     }
 }
 
-const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+const login = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-       throw new ApiError(400, 'Please Signup first');
-       }
-    const isPasswordCorrect= await user.isPasswordCorrect(password);
+        throw new ApiError(400, 'Please Signup first');
+    }
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
     if (!isPasswordCorrect) {
         throw new ApiError(400, 'Invalid password');
     }
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user);
-    const role= jwt.sign({role:user.role},process.env.ROLE_BASE_TOKEN_SECRET as string, { expiresIn: parseInt(process.env.ROLE_BASE_TOKEN_EXPIRY as string) });
+    const role = jwt.sign({ role: user.role }, process.env.ROLE_BASE_TOKEN_SECRET as string, {
+        expiresIn: parseInt(process.env.ROLE_BASE_TOKEN_EXPIRY as string),
+    });
     const options = {
         httpOnly: true,
         secure: true,
@@ -47,4 +51,3 @@ const login = asyncHandler(async (req: Request, res: Response, next: NextFunctio
 });
 
 export default login;
-

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import asyncHandler from '../../../utils/AsyncHandler';
-import ApiError from '../../../utils/ApiError';
-import ApiResponse from '../../../utils/ApiResponse';
-import Session from '../../../models/sessions.model';
-import Mentor from '../../../models/mentor.model';
+import asyncHandler from '../../../utils/AsyncHandler.js';
+import ApiError from '../../../utils/ApiError.js';
+import ApiResponse from '../../../utils/ApiResponse.js';
+import Session from '../../../models/sessions.model.js';
+import Mentor from '../../../models/mentor.model.js';
 
 export const sessionApprove = asyncHandler(async (req: Request, res: Response) => {
     const { mentorId, sessionId, sessionStatus } = req.body;

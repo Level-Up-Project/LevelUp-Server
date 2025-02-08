@@ -1,6 +1,6 @@
 import axios from 'axios';
-import ApiError from '../utils/ApiError';
-import logger from '../config/logger';
+import ApiError from '../utils/ApiError.js';
+import logger from '../config/logger.js';
 
 const ZOOM_CLIENT_ID = process.env.ZOOM_CLIENT_ID!;
 const ZOOM_CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET!;
@@ -34,7 +34,7 @@ interface ZoomMeetingResponse {
 // Generate OAuth token to access Zoom API
 async function getZoomAccessToken(): Promise<string> {
     try {
-      logger.info('Fetching Zoom access token...');
+        logger.info('Fetching Zoom access token...');
 
         const response = await axios.post(
             ZOOM_TOKEN_URL,
@@ -50,11 +50,11 @@ async function getZoomAccessToken(): Promise<string> {
             }
         );
 
-       logger.info('Zoom access token fetched successfully:', response.data.access_token);
+        logger.info('Zoom access token fetched successfully:', response.data.access_token);
         return response.data.access_token;
     } catch (error: any) {
         logger.error('Error fetching Zoom access token:', error.response?.data || error.message);
-        throw new ApiError(500,'Failed to get Zoom access token');
+        throw new ApiError(500, 'Failed to get Zoom access token');
     }
 }
 
@@ -78,7 +78,7 @@ async function createZoomMeeting(meetingDetails: MeetingDetails): Promise<ZoomMe
                     participant_video: true,
                     join_before_host: false,
                     mute_upon_entry: true,
-                    waiting_room: true
+                    waiting_room: true,
                 },
             },
             {
@@ -100,7 +100,7 @@ async function createZoomMeeting(meetingDetails: MeetingDetails): Promise<ZoomMe
         };
     } catch (error: any) {
         logger.error('Error creating Zoom meeting:', error.response?.data || error.message);
-        throw new ApiError(500,'Failed to get Zoom access token');
+        throw new ApiError(500, 'Failed to get Zoom access token');
     }
 }
 
@@ -119,7 +119,7 @@ async function getZoomMeeting(meetingId: string): Promise<any> {
         return response.data;
     } catch (error: any) {
         logger.error('Error fetching Zoom meeting:', error.response?.data || error.message);
-        throw new ApiError(500,'Failed to get Zoom access token');
+        throw new ApiError(500, 'Failed to get Zoom access token');
     }
 }
 
@@ -128,21 +128,17 @@ async function updateZoomMeeting(meetingId: string, meetingDetails: Partial<Meet
     try {
         const accessToken = await getZoomAccessToken();
 
-        await axios.patch(
-            `${ZOOM_API_BASE_URL}/meetings/${meetingId}`,
-            meetingDetails,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
+        await axios.patch(`${ZOOM_API_BASE_URL}/meetings/${meetingId}`, meetingDetails, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
 
         return true;
     } catch (error: any) {
         console.error('Error updating Zoom meeting:', error.response?.data || error.message);
-        throw new ApiError(500,'Failed to get Zoom access token');
+        throw new ApiError(500, 'Failed to get Zoom access token');
     }
 }
 
@@ -161,7 +157,7 @@ async function deleteZoomMeeting(meetingId: string): Promise<boolean> {
         return true;
     } catch (error: any) {
         console.error('Error deleting Zoom meeting:', error.response?.data || error.message);
-        throw new ApiError(500,'Failed to get Zoom access token');
+        throw new ApiError(500, 'Failed to get Zoom access token');
     }
 }
 interface Participant {
@@ -172,25 +168,24 @@ interface Participant {
     leave_time: string;
     duration: number;
     // You can add more fields here based on the Zoom API documentation if needed
-  }
-  
-  interface ParticipantsReportResponse {
+}
+
+interface ParticipantsReportResponse {
     page_count: number;
     page_size: number;
     total_records: number;
     next_page_token: string;
     participants: Participant[];
-  }
+}
 
 async function getMeetingDetails(meetingId: number): Promise<ParticipantsReportResponse> {
     try {
-        
         const url = `https://api.zoom.us/v2/report/meetings/${meetingId}/participants`;
         const accessToken = await getZoomAccessToken();
         const response = await axios.get<ParticipantsReportResponse>(url, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
         console.log('response: ', response);
         return response.data;
@@ -198,13 +193,6 @@ async function getMeetingDetails(meetingId: number): Promise<ParticipantsReportR
         console.log(error);
         throw new ApiError(500, 'Failed to get meeting details');
     }
-  }
+}
 
-
-export {
-    createZoomMeeting,
-    getZoomMeeting,
-    updateZoomMeeting,
-    deleteZoomMeeting,
-    getMeetingDetails
-};
+export { createZoomMeeting, getZoomMeeting, updateZoomMeeting, deleteZoomMeeting, getMeetingDetails };

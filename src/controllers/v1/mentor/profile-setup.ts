@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import asyncHandler from '../../../utils/AsyncHandler';
-import Mentor from '../../../models/mentor.model';
-import ApiError from '../../../utils/ApiError';
-import ApiResponse from '../../../utils/ApiResponse';
+import asyncHandler from '../../../utils/AsyncHandler.js';
+import Mentor from '../../../models/mentor.model.js';
+import ApiError from '../../../utils/ApiError.js';
+import ApiResponse from '../../../utils/ApiResponse.js';
 
 export const profileSetup = asyncHandler(async (req: Request, res: Response) => {
     const { mentorId, currentCourses, slots } = req.body;
