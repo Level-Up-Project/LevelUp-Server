@@ -25,7 +25,7 @@ const forgetPassword = asyncHandler(async (req: Request, res: Response, next: Ne
         throw new ApiError(401,"User not found with this email");
     }   
      const resetToken=  jwt.sign({id:user._id},process.env.JWT_RESET_PASSWORD_SECRET as string, { expiresIn: parseInt(process.env.JWT_RESET_PASSWORD_EXPIRATION_MINUTES as string) });
-     let url = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+     let url = `${process.env.CLIENT_URL}/reset-password/?token=${resetToken}`;
      const htmlContent=resetPasswordTemplate(url);
      try {
         await sendEmail(email, "Reset Password", htmlContent);
