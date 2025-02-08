@@ -1,25 +1,21 @@
 import nodemailer from 'nodemailer';
-import resetPasswordTemplate from '../templates/resetPassWordTemplate';
-import asyncHandler from '../utils/AsyncHandler';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     port: 587,
     secure: true,
-    auth: { 
+    auth: {
         user: process.env.NODE_MAILER_EMAIL,
-        pass:process.env.NODE_MAILER_PASS
-    }
+        pass: process.env.NODE_MAILER_PASS,
+    },
 });
 
-
-
-const sendEmail =  async (email: string, subject: string, htmlContent: string) => {
+const sendEmail = async (email: string, subject: string, htmlContent: string) => {
     const mailOptions = {
         from: process.env.NODE_MAILER_EMAIL,
         to: email,
         subject: subject,
-        html: htmlContent
+        html: htmlContent,
     };
 
     try {
@@ -28,6 +24,6 @@ const sendEmail =  async (email: string, subject: string, htmlContent: string) =
     } catch (error) {
         console.log('Error sending email: ' + error);
     }
-}
+};
 
-export default sendEmail
+export default sendEmail;

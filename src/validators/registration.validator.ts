@@ -4,9 +4,7 @@ import { body } from 'express-validator';
     body("name")
     .isString()
     .isLength({ min: 1 })
-    .withMessage("Name is required")
-
-    ,
+    .withMessage("Name is required"),
 
     body("email")
     .notEmpty()

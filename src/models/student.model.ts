@@ -77,9 +77,9 @@ const StudentSchema: Schema = new Schema(
       unique: true,
     },
     subRole: {
-      type: [String],  
-      default: ['student'],
+      type: [String],
       enum: ['student', 'alumni', 'senior-alumni', 'contributor'],
+      default: ['student'],
     },
     enrolledCourses: {
       type: [mongoose.Schema.Types.ObjectId],
