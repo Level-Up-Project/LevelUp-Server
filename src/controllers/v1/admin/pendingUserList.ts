@@ -5,9 +5,7 @@ import ApiError from '../../../utils/ApiError.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
 
 export const getpendingResponse = asyncHandler(async (req: Request, res: Response) => {
-    const pendingUsers = await User.find({ status: 'pending' })
-        .select('-password -avatar -phoneNumber -location -preference -refreshToken')
-        .lean();
+    const pendingUsers = await User.find({ status: 'pending' }).select('_id name email status').lean();
 
     if (!pendingUsers.length) {
         throw new ApiError(404, 'No pending request found');
