@@ -7,7 +7,7 @@ import ApiResponse from '../../../utils/ApiResponse.js';
 export const adminUserApproval = asyncHandler(async (req: Request, res: Response) => {
     const { userId, status, role } = req.body;
 
-    if (!userId || !status) {
+    if (!userId || !status || !role) {
         throw new ApiError(400, 'User ID and Status is required');
     }
 

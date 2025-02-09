@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { adminUserApproval } from '../controllers/v1/admin/user-approval.js';
 import { updateRoleAndSubRole } from '../controllers/v1/admin/update-role-and-subrole.js';
+import { getpendingResponse } from '../controllers/v1/admin/pendingUserList.js';
 
 const adminRoute = Router();
 
@@ -28,6 +29,8 @@ const adminRoute = Router();
  *      200:
  *        description: User approved or rejected.
  */
+
+adminRoute.get('/pending-user-list', getpendingResponse);
 adminRoute.post('/user-approval', adminUserApproval);
 adminRoute.post('/update-role-and-sub-role', updateRoleAndSubRole);
 
