@@ -8,14 +8,8 @@ import cookieparser from 'cookie-parser';
 import config from './config/config.js';
 import errorHandler from './utils/error.js';
 import router from './routes/index.js';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJSDoc from 'swagger-jsdoc';
-import { swaggerOptions } from './swagger.js';
 
 const app = express();
-
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // app.use('/api-docs', express.static('public'));
 
@@ -43,6 +37,7 @@ app.options('*', cors());
 
 // ==================== Routes ====================
 app.use('/api/v1', router);
+// swaggerDocs(app, parseInt(config.PORT as string));
 
 app.use(errorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void);
 

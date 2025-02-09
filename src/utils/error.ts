@@ -1,8 +1,8 @@
 import logger from '../config/logger.js';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import ApiError from './ApiError.js';
 
-const errorHandler = (err: any, req: Request, res: Response): Response => {
+const errorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof ApiError) {
         logger.error({
             message: err.message,
@@ -14,9 +14,10 @@ const errorHandler = (err: any, req: Request, res: Response): Response => {
         });
 
         return res.status(err.statusCode || 500).json({
+            message: err.message || 'something went wrong',
+            statusCode: err.statusCode,
+            errors: err.errors,
             success: false,
-            message: err.message || 'Internal Server Error',
-            errors: err.errors || [],
         });
     }
 
