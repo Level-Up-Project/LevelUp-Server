@@ -28,13 +28,14 @@ const login = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-        throw new ApiError(400, 'Please Signup first');
+        throw new ApiError(400, 'Please Signup first, Email not found');
     }
     const isPasswordCorrect = await user.isPasswordCorrect(password);
     if (!isPasswordCorrect) {
         throw new ApiError(400, 'Invalid password');
     }
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user);
+
     const role = jwt.sign({ role: user.role }, process.env.ROLE_BASE_TOKEN_SECRET as string, {
         expiresIn: parseInt(process.env.ROLE_BASE_TOKEN_EXPIRY as string),
     });
