@@ -59,5 +59,5 @@ export const getPastSession = asyncHandler(async (req: Request, res: Response) =
         throw new ApiError(400, 'No past sessions found');
     }
 
-    return res.status(200).json(new ApiResponse(200, pastSessions, 'Past sessions found'));
+    return res.status(200).json(new ApiResponse(200, 'Past sessions found', pastSessions));
 });

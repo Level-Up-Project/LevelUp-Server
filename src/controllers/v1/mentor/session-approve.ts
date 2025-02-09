@@ -26,5 +26,5 @@ export const sessionApprove = asyncHandler(async (req: Request, res: Response) =
     mentor.bookedSessions.push(sessionId);
     await mentor.save();
 
-    return res.status(200).json(new ApiResponse(200, {}, 'Session approved successfully'));
+    return res.status(200).json(new ApiResponse(200, 'Session approved successfully'));
 });

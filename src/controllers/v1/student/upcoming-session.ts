@@ -39,12 +39,12 @@ const upcomingSessions = asyncHandler(async (req: AuthenticatedRequest, res: Res
     const upcomingSessions = student.bookedSessions;
 
     if (!upcomingSessions || upcomingSessions.length === 0) {
-        return res.status(200).json(new ApiResponse(200, [], 'No upcoming sessions found.'));
+        return res.status(200).json(new ApiResponse(200, 'No upcoming sessions found.'));
     }
 
     return res
         .status(200)
-        .json(new ApiResponse(200, upcomingSessions, 'Upcoming sessions (ongoing and future) retrieved successfully.'));
+        .json(new ApiResponse(200, 'Upcoming sessions (ongoing and future) retrieved successfully.', upcomingSessions));
 });
 
 export default upcomingSessions;

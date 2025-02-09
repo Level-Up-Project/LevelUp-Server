@@ -27,7 +27,7 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
     user.password = password;
     await user.save({ validateBeforeSave: false });
     // send email to user that password has been reset
-    return res.status(200).json(new ApiResponse(200, {}, 'Password reset successfully'));
+    return res.status(200).json(new ApiResponse(200, 'Password reset successfully'));
 });
 
 export default resetPassword;

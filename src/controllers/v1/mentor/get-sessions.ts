@@ -34,5 +34,5 @@ export const getSessions = asyncHandler(async (req: Request, res: Response) => {
         throw new ApiError(400, 'There are no sessions available');
     }
 
-    return res.status(200).json(new ApiResponse(200, requestedSessions, 'Requested sessions found'));
+    return res.status(200).json(new ApiResponse(200, 'Requested sessions found', requestedSessions));
 });
