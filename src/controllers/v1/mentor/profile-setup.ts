@@ -17,7 +17,7 @@ export const profileSetup = asyncHandler(async (req: Request, res: Response) => 
         throw new ApiError(400, 'Please provide at least one course and skill');
     }
 
-    const mentor = new Mentor({ _id: userId, currentCoursesAssigned: currentCourses });
+    const mentor = new Mentor({ _id: userId, currentCoursesAssigned: currentCourses, skills });
 
     await mentor.save();
 

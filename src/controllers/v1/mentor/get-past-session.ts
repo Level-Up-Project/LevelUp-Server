@@ -24,18 +24,9 @@ export const getPastSession = asyncHandler(async (req: Request, res: Response) =
                         userId: mentorId,
                     },
                 },
-                status: 'completed',
+                endTime: { $lt: new Date() },
             },
         },
-        // {
-        //   $lookup: {
-        //     from: 'Course',
-        //     localField: 'courseId',
-        //     foreignField: '_id',
-        //     as: 'course',
-        //   },
-        // },
-        // { $unwind: '$course' },
         {
             $project: {
                 title: 1,
@@ -44,7 +35,6 @@ export const getPastSession = asyncHandler(async (req: Request, res: Response) =
                 recordingSrc: 1,
                 startTime: 1,
                 endTime: 1,
-                // course: '$course.name',
             },
         },
         {

@@ -21,10 +21,10 @@ export const sessionApprove = asyncHandler(async (req: Request, res: Response) =
     const zoomLink = 'https://zoom.us/j/987654321';
     session.status = sessionStatus;
     session.sessionJoinLink = zoomLink;
-    await session.save();
+    await session.save({ validateBeforeSave: false });
 
     mentor.bookedSessions.push(sessionId);
-    await mentor.save();
+    await mentor.save({ validateBeforeSave: false });
 
     return res.status(200).json(new ApiResponse(200, 'Session approved successfully'));
 });
