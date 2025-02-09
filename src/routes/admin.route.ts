@@ -6,111 +6,28 @@ import { getpendingResponse } from '../controllers/v1/admin/pendingUserList.js';
 const adminRoute = Router();
 
 /**
- * @swagger
+ * @openapi
  * /admin/user-approval:
  *  post:
- *    summary: Approve or Reject a user
- *    description: Approve or Reject a user
- *    tags:
- *      - Admin
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              userId:
- *                type: string
- *                description: User ID
- *              status:
- *                type: string
- *                description: User Status
+ *    summary: Approve or Reject a user.
+ *    description: Approve or Reject a user.
+ *    tags: Admin
+ *    parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        schema:
+ *          type: object
+ *          properties:
+ *            userId:
+ *              type: string
+ *              description: User ID
+ *            status:
+ *              type: string
+ *              description: User Status
  *    responses:
  *      200:
- *        description: User approved or rejected
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                success:
- *                  type: boolean
- *                  description: Status of the request
- *                message:
- *                  type: string
- *                  description: Message of the request
- *                errors:
- *                  type: array
- *                  description: Array of errors
- *                  items:
- *                    type: object
- *                    properties:
- *                      field:
- *                        type: string
- *                        description: Field name
- *                      message:
- *                        type: string
- *                        description: Error message
- *                      value:
- *                        type: string
- *                        description: Value of the field
- *      500:
- *        description: Internal Server Error
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                success:
- *                  type: boolean
- *                  description: Status of the request
- *                message:
- *                  type: string
- *                  description: Message of the request
- *                errors:
- *                  type: array
- *                  description: Array of errors
- *                  items:
- *                    type: object
- *                    properties:
- *                      field:
- *                        type: string
- *                        description: Field name
- *                      message:
- *                        type: string
- *                        description: Error message
- *                      value:
- *                        type: string
- *                        description: Value of the field
- *      400:
- *        description: Bad Request
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                success:
- *                  type: boolean
- *                  description: Status of the request
- *                message:
- *                  type: string
- *                  description: Message of the request
- *                errors:
- *                  type: array
- *                  description: Array of errors
- *                  items:
- *                    type: object
- *                    properties:
- *                      field:
- *                        type: string
- *                        description: Field name
- *                      message:
- *                        type: string
- *                        description: Error message
- *                      value:
- *                        type: string
- *                        description: Value of the field
+ *        description: User approved or rejected.
  */
 
 adminRoute.get('/pending-user-list', getpendingResponse);

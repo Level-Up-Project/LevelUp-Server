@@ -16,6 +16,7 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
         throw new ApiError(401, 'Password is required');
     }
     const decode = jwt.verify(token, process.env.JWT_RESET_PASSWORD_SECRET as string);
+
     if (!decode) {
         throw new ApiError(401, 'Invalid or expired token');
     }

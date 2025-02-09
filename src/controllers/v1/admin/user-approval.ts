@@ -12,16 +12,8 @@ export const adminUserApproval = asyncHandler(async (req: Request, res: Response
     }
 
     // Update the user status to approved
-    const validRoles = ['user', 'student', 'mentor', 'admin', 'superAdmin'];
-    if (!validRoles.includes(role)) {
-        throw new ApiError(404, 'Invalid role specified');
-    }
+    const user = await User.findByIdAndUpdate(userId, { $set: { status, role } });
 
-    const user = await User.findByIdAndUpdate(
-        userId, 
-        { $set: { status, role } }, 
-        { new: true, runValidators: true }
-    );
 
     if (!user) {
         throw new ApiError(400, 'User not found');

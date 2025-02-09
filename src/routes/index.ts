@@ -13,5 +13,4 @@ router.use('/mentor', mentorRoute);
 router.use('/admin', adminRoute);
 router.use('/course', courseRoute);
 
-
 export default router;

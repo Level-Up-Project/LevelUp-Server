@@ -14,19 +14,21 @@ interface AuthenticatedRequest extends Request {
 
 const upcomingSessions = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     // Extract the authenticated user's ID from the request
-    const userId = req.user?._id;
+    const userId = req.body.userId;
 
     // Get the current time
     const now = new Date();
 
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
     // Find the student associated with the authenticated user
     const student = await Student.findOne({ _id: userId }).populate({
         path: 'bookedSessions',
         model: Session,
         match: {
             $or: [
-                { startTime: { $gte: now }, status: 'approve' }, // Future sessions
-                { startTime: { $lte: now }, endTime: { $gte: now }, status: 'approve' }, // Ongoing sessions
+                // logical correction needde
+                { startTime: { $lte: now }, endTime: { $gte: midnight }, status: 'approve' },
             ],
         },
         select: 'title description type startTime endTime status',

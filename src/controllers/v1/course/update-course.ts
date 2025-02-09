@@ -1,31 +1,22 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import Course from '../../../models/course.model.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
 import ApiError from '../../../utils/ApiError.js';
 import asyncHandler from '../../../utils/AsyncHandler.js';
 
-export const updateCourse = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const updateCourse = asyncHandler(async (req: Request, res: Response) => {
     const { courseId } = req.params;
     const { courseName, category } = req.body;
 
-    // Find the course by ID
-    const course = await Course.findById(courseId);
-    if (!course) {
-        return next(new ApiError(404, `Course with ID '${courseId}' not found.`));
+    if (!courseName && !category) {
+        throw new ApiError(400, 'Course name and category are required');
     }
 
-    // Update course fields
-    if (courseName) course.courseName = courseName;
-    if (category) course.category = category;
+    // Find the course by ID
+    const course = await Course.findByIdAndUpdate(courseId, { courseName, category }, { new: true });
+    if (!course) {
+        throw new ApiError(404, 'Course not found');
+    }
 
-    // Save the updated course
-    const updatedCourse = await course.save();
-
-    return res.status(200).json(
-        new ApiResponse(200, 'Course updated successfully.', {
-            courseId: updatedCourse._id,
-            courseName: updatedCourse.courseName,
-            category: updatedCourse.category,
-        })
-    );
+    return res.status(200).json(new ApiResponse(200, 'Course updated successfully.', course));
 });
