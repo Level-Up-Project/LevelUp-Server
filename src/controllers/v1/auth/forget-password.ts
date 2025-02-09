@@ -31,7 +31,7 @@ const forgetPassword = asyncHandler(async (req: Request, res: Response) => {
         console.log('error occured while sending email', error);
     }
 
-    res.status(200).json(new ApiResponse(200, {}, 'Reset link has been sent to your email'));
+    res.status(200).json(new ApiResponse(200, 'Reset link has been sent to your email'));
 });
 
 export default forgetPassword;

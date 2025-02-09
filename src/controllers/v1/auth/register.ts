@@ -24,7 +24,7 @@ const register = asyncHandler(async (req: RegisterRequest, res: Response) => {
         throw new ApiError(500, 'Error occured while registering user.');
     }
 
-    return res.status(200).json(new ApiResponse(200, {}, 'Successfully Registered'));
+    return res.status(200).json(new ApiResponse(200, 'Successfully Registered'));
 });
 
 export default register;

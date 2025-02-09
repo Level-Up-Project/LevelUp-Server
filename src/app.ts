@@ -8,8 +8,16 @@ import cookieparser from 'cookie-parser';
 import config from './config/config.js';
 import errorHandler from './utils/error.js';
 import router from './routes/index.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import { swaggerOptions } from './swagger.js';
 
 const app = express();
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// app.use('/api-docs', express.static('public'));
 
 app.use(morgan(config.NODE_ENV === 'development' ? 'dev' : 'combined'));
 

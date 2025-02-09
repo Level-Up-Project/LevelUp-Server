@@ -22,7 +22,7 @@ const switchRole = asyncHandler(async (req: AuthenticatedRequest, res: Response)
     return res
         .status(200)
         .cookie('role', role, options)
-        .json(new ApiResponse(200, user, 'Role switched successfully'));
+        .json(new ApiResponse(200, 'Role switched successfully', user));
 });
 
 export default switchRole;

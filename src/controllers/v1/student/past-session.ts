@@ -40,7 +40,7 @@ const pastSession = asyncHandler(async (req: AuthenticatedRequest, res: Response
     const pastSessions = student.bookedSessions;
 
     if (!pastSessions || pastSessions.length === 0) {
-        return res.status(200).json(new ApiResponse(200, [], 'No past sessions found'));
+        return res.status(200).json(new ApiResponse(200, 'No past sessions found'));
     }
 
     // Get the total count of past sessions for pagination
@@ -54,19 +54,15 @@ const pastSession = asyncHandler(async (req: AuthenticatedRequest, res: Response
     const totalPages = Math.ceil(totalPastSessions / limit);
 
     return res.status(200).json(
-        new ApiResponse(
-            200,
-            {
-                sessions: pastSessions,
-                pagination: {
-                    page,
-                    limit,
-                    totalPages,
-                    totalRecords: totalPastSessions,
-                },
+        new ApiResponse(200, 'Past sessions retrieved successfully', {
+            sessions: pastSessions,
+            pagination: {
+                page,
+                limit,
+                totalPages,
+                totalRecords: totalPastSessions,
             },
-            'Past sessions retrieved successfully'
-        )
+        })
     );
 });
 

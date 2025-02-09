@@ -21,7 +21,7 @@ export const profileSetup = asyncHandler(async (req: Request, res: Response) => 
 
     if (!student) {
         student = await Student.create(req.body);
-        return res.status(201).json(new ApiResponse(201, student, 'Profile created successfully.'));
+        return res.status(201).json(new ApiResponse(201, 'Profile created successfully.', student));
     }
 
     // If student exists, update the profile
@@ -35,7 +35,7 @@ export const profileSetup = asyncHandler(async (req: Request, res: Response) => 
 
     await student.save({ validateBeforeSave: false });
 
-    res.status(200).json(new ApiResponse(200, student, 'Profile updated successfully.'));
+    res.status(200).json(new ApiResponse(200, 'Profile updated successfully.', student));
 });
 
 // Get Student Profile by Student Code
@@ -48,5 +48,5 @@ export const getStudentProfile = asyncHandler(async (req: Request, res: Response
         throw new ApiError(404, 'Student not found.');
     }
 
-    res.status(200).json(new ApiResponse(200, student, 'Student profile retrieved successfully.'));
+    res.status(200).json(new ApiResponse(200, 'Student profile retrieved successfully.', student));
 });

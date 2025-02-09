@@ -31,7 +31,7 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
     return res
         .status(200)
         .cookie('accessToken', accessToken, { httpOnly: true, secure: true })
-        .json(new ApiResponse(200, {}, 'Access Token Refreshed Successfully'));
+        .json(new ApiResponse(200, 'Access Token Refreshed Successfully'));
 });
 
 export default refreshAccessToken;
