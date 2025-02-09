@@ -28,7 +28,7 @@ const pastSession = asyncHandler(async (req: AuthenticatedRequest, res: Response
     const student = await Student.findOne({ _id: userId }).populate({
         path: 'bookedSessions',
         model: Session,
-        match: { endTime: { $lt: now }, status: 'approve' },
+        match: { endTime: { $lt: now } },
         select: 'title description type startTime endTime status',
         options: { skip, limit },
     });

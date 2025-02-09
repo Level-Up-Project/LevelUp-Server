@@ -5,48 +5,23 @@ import asyncHandler from '../../../utils/AsyncHandler.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
 
 // Create or Update Student Profile
-export const profileSetup = asyncHandler(async (req: Request, res: Response) => {
-    const {
-        studentCode,
-        subRole,
-        enrolledCourses,
+const profileSetup = asyncHandler(async (req: Request, res: Response) => {
+    const { userId, studentCode, currentCourses, skills } = req.body;
+
+    const student = await Student.findById(userId);
+    if (!student) {
+        throw new ApiError(400, 'Student profile already exists.');
+    }
+    // If student exists, update the profile;
+    const createStudent = await Student.create({
+        _id: userId,
         currentCourses,
         skills,
-        bookedSessions,
-        educationDetails,
-        pastExperience,
-    } = req.body;
-
-    let student = await Student.findOne({ studentCode });
-
-    if (!student) {
-        student = await Student.create(req.body);
-        return res.status(201).json(new ApiResponse(201, 'Profile created successfully.', student));
+        studentCode,
+    });
+    if (!createStudent) {
+        throw new ApiError(400, 'Error Occured while creating student profile.');
     }
-
-    // If student exists, update the profile
-    student.subRole = subRole || student.subRole;
-    student.enrolledCourses = enrolledCourses || student.enrolledCourses;
-    student.currentCourse = currentCourses || student.currentCourse;
-    student.skills = skills || student.skills;
-    student.bookedSessions = bookedSessions || student.bookedSessions;
-    student.educationDetails = educationDetails || student.educationDetails;
-    student.pastExperience = pastExperience || student.pastExperience;
-
-    await student.save({ validateBeforeSave: false });
-
     res.status(200).json(new ApiResponse(200, 'Profile updated successfully.', student));
 });
-
-// Get Student Profile by Student Code
-export const getStudentProfile = asyncHandler(async (req: Request, res: Response) => {
-    const { studentCode } = req.params;
-
-    const student = await Student.findOne({ studentCode }).populate('enrolledCourses currentCourses bookedSessions');
-
-    if (!student) {
-        throw new ApiError(404, 'Student not found.');
-    }
-
-    res.status(200).json(new ApiResponse(200, 'Student profile retrieved successfully.', student));
-});
+export default profileSetup;
