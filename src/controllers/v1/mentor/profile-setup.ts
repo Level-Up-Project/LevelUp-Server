@@ -17,9 +17,13 @@ export const profileSetup = asyncHandler(async (req: Request, res: Response) => 
         throw new ApiError(400, 'Please provide at least one course and skill');
     }
 
-    const mentor = new Mentor({ _id: userId, currentCoursesAssigned: currentCourses });
+    const mentor = (await Mentor.create({ _id: userId, currentCoursesAssigned: currentCourses, skills })).populate(
+        'currentCoursesAssigned'
+    );
 
-    await mentor.save();
+    if (!mentor) {
+        throw new ApiError(500, 'Error Occured While Creating Mentor in Database');
+    }
 
     return res.status(200).json(new ApiResponse(200, 'Mentor profile setup successful', mentor));
 });

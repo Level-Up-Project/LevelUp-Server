@@ -17,6 +17,10 @@ const SlotDetailsSchema = new Schema({
         type: Date,
         required: [true, 'Please provide the end time'],
     },
+    isBooked: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 // Defining the interface for passed Session

@@ -21,7 +21,7 @@ const CourseSchema: Schema = new Schema(
             type: String,
             enum: {
                 values: ['coding', 'dsa', 'csbt'],
-                message: "Category must be one of 'coding', 'dsa', 'csbt' ",
+                message: 'Category is not valid',
             },
             required: [true, 'Category is required'],
             trim: true,
