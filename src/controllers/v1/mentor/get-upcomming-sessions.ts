@@ -4,7 +4,7 @@ import ApiError from '../../../utils/ApiError.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
 import Session from '../../../models/sessions.model.js';
 
-export const getSessions = asyncHandler(async (req: Request, res: Response) => {
+export const getUpcommingSessions = asyncHandler(async (req: Request, res: Response) => {
     const { mentorId } = req.params;
 
     if (!mentorId) {
@@ -13,16 +13,12 @@ export const getSessions = asyncHandler(async (req: Request, res: Response) => {
 
     // Find all session where start time grater and equal to today's date and where status is pending or approved
     const requestedSessions = await Session.find({
-        sessionMembers: {
-            host: {
-                userId: mentorId,
-            },
-        },
+        'sessionMembers.host.userId': mentorId,
         startTime: {
             $gte: new Date(),
         },
         status: {
-            $in: ['pending', 'approve'],
+            $in: ['pending', 'approved'],
         },
     });
 
