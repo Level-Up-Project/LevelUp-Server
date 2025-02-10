@@ -67,7 +67,10 @@ const UserSchema: Schema = new Schema(
         role: {
             type: String,
             default: 'user',
-            enum: ['user', 'student', 'mentor', 'admin', 'superAdmin'],
+            enum: {
+                values: ['user', 'student', 'mentor', 'admin', 'superAdmin'],
+                message: 'Role is not valid',
+            },
         },
         isActive: {
             type: Boolean,
@@ -76,7 +79,10 @@ const UserSchema: Schema = new Schema(
         status: {
             type: String,
             default: 'pending',
-            enum: ['pending', 'verified', 'banned'],
+            enum: {
+                values: ['pending', 'verified', 'banned'],
+                message: 'Status is not valid',
+            },
         },
         location: locationSchema,
         preference: preferenceSchema,

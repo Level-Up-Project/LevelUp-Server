@@ -5,7 +5,8 @@ import ApiError from '../../../utils/ApiError.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
 
 export const createSlot = asyncHandler(async (req: Request, res: Response) => {
-    const { mentorId, slots } = req.body;
+    const { slots } = req.body;
+    const { mentorId } = req.params;
 
     if (!mentorId) {
         throw new ApiError(400, 'Mentor ID is required');

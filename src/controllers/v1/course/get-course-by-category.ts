@@ -5,7 +5,7 @@ import asyncHandler from '../../../utils/AsyncHandler.js';
 import ApiError from '../../../utils/ApiError.js';
 
 export const getCoursesByCategory = asyncHandler(async (req: Request, res: Response) => {
-    const { category } = req.query;
+    const { category } = req.params;
 
     if (!category) {
         throw new ApiError(400, 'Category is required.');

@@ -11,6 +11,9 @@ const bookSessionValidator = [
 
     body('description').notEmpty().withMessage('description required'),
 
+    body('sessionType')
+        .isIn(['ec-connect', 'ia-connect', 'leadership-connect', 'mentor-connect'])
+        .withMessage('Invalid session type'),
     body('joinees')
         .isArray()
         .withMessage('Emails must be an array')
@@ -25,12 +28,8 @@ const bookSessionValidator = [
             return true;
         }),
 
-    body('startTime')
-        .notEmpty()
-        .withMessage('startTime required')
-        .bail()
-        .isDataURI()
-        .withMessage('Invalid start time format'),
+    // body('startTime').notEmpty().withMessage('startTime required').bail().isDate().withMessage('Invalid start time format'),
+    // body('endTime').notEmpty().withMessage('endTime required').bail().isDate().withMessage('Invalid end time format'),
 ];
 
 export default bookSessionValidator;
