@@ -12,8 +12,7 @@ export const adminUserApproval = asyncHandler(async (req: Request, res: Response
     }
 
     // Update the user status to approved
-    const user = await User.findByIdAndUpdate(userId, { $set: { status, role } });
-
+    const user = await User.findByIdAndUpdate(userId, { status, role }, { new: true }).select('_id name email status role');
 
     if (!user) {
         throw new ApiError(400, 'User not found');

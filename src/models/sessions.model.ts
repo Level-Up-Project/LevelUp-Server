@@ -17,7 +17,7 @@ export interface ISession extends Document {
     recordingSrc?: string | null;
     startTime: Date;
     endTime: Date;
-    status: 'pending' | 'approve' | 'cancel';
+    status: 'pending' | 'approved' | 'cancel';
     isSolo: boolean;
 }
 
@@ -29,9 +29,11 @@ const sessionMemberTimingSchema: Schema = new Schema<ISessionMemberTiming>({
     },
     joinTime: {
         type: Date,
+        default: null,
     },
     leaveTime: {
         type: Date,
+        default: null,
     },
 });
 
@@ -92,7 +94,7 @@ const SessionSchema: Schema = new Schema(
 
         sessionJoinLink: {
             type: String,
-            required: [true, 'Session join link is required'],
+            default: null,
             trim: true,
         },
 
@@ -113,7 +115,7 @@ const SessionSchema: Schema = new Schema(
 
         status: {
             type: String,
-            enum: ['pending', 'approve', 'cancel'],
+            enum: ['pending', 'approved', 'cancel'],
             required: [true, 'Session status is required'],
             default: 'pending',
         },
