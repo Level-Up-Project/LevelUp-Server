@@ -3,25 +3,27 @@ import Student from '../../../models/student.model.js';
 import ApiError from '../../../utils/ApiError.js';
 import asyncHandler from '../../../utils/AsyncHandler.js';
 import ApiResponse from '../../../utils/ApiResponse.js';
+import User from '../../../models/user.model.js';
 
 // Create or Update Student Profile
 const profileSetup = asyncHandler(async (req: Request, res: Response) => {
     const { userId, studentCode, currentCourses, skills } = req.body;
 
-    const student = await Student.findById(userId);
+    const user = await User.findById(userId);
+    if (user?.role !== 'student') {
+        throw new ApiError(400, 'User is not a student');
+    }
+
+    if (currentCourses.length < 1 || skills.length < 1) {
+        throw new ApiError(400, 'Please provide at least one course and skill');
+    }
+
+    const student = (await Student.create({ _id: userId, studentCode, currentCourses, skills })).populate('currentCourses');
+
     if (!student) {
-        throw new ApiError(400, 'Student profile already exists.');
+        throw new ApiError(500, 'Error Occured While Creating Student in Database');
     }
-    // If student exists, update the profile;
-    const createStudent = await Student.create({
-        _id: userId,
-        currentCourses,
-        skills,
-        studentCode,
-    });
-    if (!createStudent) {
-        throw new ApiError(400, 'Error Occured while creating student profile.');
-    }
-    res.status(200).json(new ApiResponse(200, 'Profile updated successfully.', student));
+
+    return res.status(200).json(new ApiResponse(200, 'Student profile setup successful', student));
 });
 export default profileSetup;
